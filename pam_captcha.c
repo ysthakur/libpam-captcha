@@ -89,6 +89,7 @@ static void paminfo(pam_handle_t *pamh, char *fmt, ...);
 static void pamvprompt(pam_handle_t *pamh, int style, char **resp, char *fmt, va_list ap);
 static int math_captcha(pam_handle_t *pamh, int flags, int argc, const char *argv[]);
 static int randomstring_captcha(pam_handle_t *pamh, int flags, int argc, const char *argv[]);
+static int simple_captcha(pam_handle_t *pamh, int flags, int argc, const char *argv[]);
 
 typedef int (*captcha_func_t)(pam_handle_t *, int, int, const char **);
 
@@ -99,6 +100,7 @@ static const struct captcha_entry {
 } all_captchas[] = {
   { "math", math_captcha, },
   { "randomstring", randomstring_captcha, },
+  { "simple", "simple_captcha", }, 
   { NULL, NULL, },
 };
 
@@ -274,6 +276,17 @@ static int randomstring_captcha(pam_handle_t *pamh, int flags, int argc, const c
   free(resp);
   return ret;
 }/*}}}*/
+
+/* Super simple captcha {{{ */
+static int simple_captcha(pam_handle_t *pamh, int flags, int argc, const char *argv[]) {
+  char *resp = NULL;
+
+  figlet(pamh, "Type anything");
+  pamprompt(pamh, PAM_PROMPT_ECHO_ON, &resp, "Answer: ");
+
+  return PAM_SUCCESS;
+}/*}}}*/
+
 
 //static int (*captchas[])(pam_handle_t *, int, int, const char **);// = {
   //randomstring_captcha,
