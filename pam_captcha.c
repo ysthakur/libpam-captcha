@@ -100,7 +100,7 @@ static const struct captcha_entry {
 } all_captchas[] = {
   { "math", math_captcha, },
   { "randomstring", randomstring_captcha, },
-  { "simple", "simple_captcha", }, 
+  { "simple", simple_captcha, }, 
   { NULL, NULL, },
 };
 
